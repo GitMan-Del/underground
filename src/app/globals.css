@@ -4,23 +4,64 @@
   --background: #ffffff;
   --foreground: #171717;
 }
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes ping2 {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  75%, 100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.animate-ping2 {
+  animation: ping2 2s cubic-bezier(0, 0, 0.2, 1);
+  opacity: 1;
+}
+
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fadein {
+  animation: fadein 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes shutterTopClose {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(0); }
+}
+@keyframes shutterTopOpen {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+@keyframes shutterBottomClose {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(0); }
+}
+@keyframes shutterBottomOpen {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100%); }
+}
+.shutter-top-close {
+  animation: shutterTopClose 0.7s cubic-bezier(0.77,0,0.175,1) forwards;
+}
+.shutter-bottom-close {
+  animation: shutterBottomClose 0.7s cubic-bezier(0.77,0,0.175,1) forwards;
+}
+.shutter-top-open {
+  animation: shutterTopOpen 0.4s cubic-bezier(0.77,0,0.175,1) forwards;
+}
+.shutter-bottom-open {
+  animation: shutterBottomOpen 0.4s cubic-bezier(0.77,0,0.175,1) forwards;
 }
