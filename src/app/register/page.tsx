@@ -9,7 +9,7 @@ export default function RegisterPage() {
   const Logo = "/Complete Logo 4.png";
   const [formData, setFormData] = useState({
     email: "",
-    name: "",
+    username: "",
     password: "",
     repeatPassword: "",
   });
@@ -29,7 +29,7 @@ export default function RegisterPage() {
     const newErrors: string[] = [];
 
     if (!formData.email) newErrors.push("Email-ul este obligatoriu");
-    if (!formData.name) newErrors.push("Numele este obligatoriu");
+    if (!formData.username) newErrors.push("Username-ul este obligatoriu");
     if (!formData.password) newErrors.push("Parola este obligatorie");
     if (formData.password.length < 6) newErrors.push("Parola trebuie să aibă cel puțin 6 caractere");
     if (formData.password !== formData.repeatPassword) newErrors.push("Parolele nu se potrivesc");
@@ -54,7 +54,7 @@ export default function RegisterPage() {
         },
         body: JSON.stringify({
           email: formData.email,
-          name: formData.name,
+          username: formData.username,
           password: formData.password,
         }),
       });
@@ -67,8 +67,8 @@ export default function RegisterPage() {
       }
 
       // Registration successful, redirect to login
-      router.push("/login?message=Cont creat cu succes! Contul va fi activat de administrator. Te poți conecta după activare.");
-    } catch (error) {
+      router.push("/login?message=Cont creat cu succes! Te poți conecta acum.");
+    } catch {
       setErrors(["A apărut o eroare. Încearcă din nou."]);
     } finally {
       setIsLoading(false);
@@ -125,17 +125,17 @@ export default function RegisterPage() {
             disabled={isLoading}
           />
 
-          {/* Name */}
+          {/* Username */}
           <input
             type="text"
-            id="name"
-            name="name"
-            value={formData.name}
+            id="username"
+            name="username"
+            value={formData.username}
             onChange={handleInputChange}
-            placeholder="Nume complet:"
+            placeholder="Nume de utilizator:"
             className="w-full bg-[#232323] bg-opacity-80 text-[#bdbdbd] font-semibold placeholder:font-semibold placeholder:text-[#bdbdbd] rounded-md px-4 py-2 outline-none border-none text-base shadow-md"
             style={{ fontFamily: "inherit" }}
-            autoComplete="name"
+            autoComplete="username"
             required
             disabled={isLoading}
           />

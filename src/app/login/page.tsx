@@ -1,12 +1,12 @@
 "use client"
 
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import { signIn, getSession, useSession } from "next-auth/react";
+import React, { useState, useEffect, Suspense } from "react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function LoginPage() {
+function LoginForm() {
   const Logo = "/Complete Logo 4.png";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +15,6 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { data: session, status } = useSession();
 
   useEffect(() => {
     const message = searchParams.get('message');
@@ -23,17 +22,6 @@ export default function LoginPage() {
       setSuccess(message);
     }
   }, [searchParams]);
-
-  // Check if user is already authenticated
-  useEffect(() => {
-    if (status === "loading") return; // Still loading
-    
-    if (status === "authenticated") {
-      // User is already authenticated, redirect to home
-      router.push("/");
-      return;
-    }
-  }, [status, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,39 +37,20 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        // Check if it's an access denied error
-        if (result.error === "AccessDenied") {
-          setError("Contul nu are acces încă. Contactează administratorul.");
-        } else {
-          setError("Email sau parolă incorectă");
-        }
+        setError("Email sau parolă incorectă");
       } else {
         // Check if user is authenticated
         const session = await getSession();
         if (session) {
-          router.push("/");
+          router.push("/my-pc");
         }
       }
-    } catch (error) {
+    } catch {
       setError("A apărut o eroare. Încearcă din nou.");
     } finally {
       setIsLoading(false);
     }
   };
-
-  // Show loading while checking authentication
-  if (status === "loading") {
-    return (
-      <div className="w-full h-screen bg-[#070707] flex items-center justify-center">
-        <div className="text-white text-xl">Se încarcă...</div>
-      </div>
-    );
-  }
-
-  // Don't render login form if user is already authenticated (will redirect)
-  if (status === "authenticated") {
-    return null;
-  }
 
   return (
     <div className="w-full h-screen relative overflow-hidden flex items-center justify-center">
@@ -206,5 +175,17 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="w-full h-screen bg-[#070707] flex items-center justify-center">
+        <div className="text-white text-xl">Se încarcă...</div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

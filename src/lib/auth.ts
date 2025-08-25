@@ -125,30 +125,6 @@ const authConfig = {
   pages: {
     signIn: '/login',
   },
-  callbacks: {
-    async jwt({ token, user }: { token: Record<string, unknown>; user: Record<string, unknown> }) {
-      if (user) {
-        (token as Record<string, unknown>).name = user.name
-        (token as Record<string, unknown>).image = user.image
-      }
-      return token
-    },
-    async session({ session, token }: { session: Record<string, unknown>; token: Record<string, unknown> }) {
-      if (session.user && token) {
-        ((session.user as Record<string, unknown>).name as string) = (token as Record<string, unknown>).name as string
-        ((session.user as Record<string, unknown>).image as string | undefined) = (token as Record<string, unknown>).image as string | undefined
-      }
-      return session
-    },
-    async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
-      // If user is trying to access login/register while authenticated, redirect to home
-      if (url.startsWith(baseUrl + '/login') || url.startsWith(baseUrl + '/register')) {
-        return baseUrl + '/'
-      }
-      // Allow all other redirects
-      return url
-    }
-  },
   session: {
     strategy: "jwt" as const,
   },
