@@ -4,10 +4,10 @@ import { supabase } from '../../../../lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, name, password } = await request.json()
+    const { email, username, password } = await request.json()
 
     // Validation
-    if (!email || !name || !password) {
+    if (!email || !username || !password) {
       return NextResponse.json(
         { error: 'Toate câmpurile sunt obligatorii' },
         { status: 400 }
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     const { data: existingUser, error: checkError } = await supabase
       .from('users_tabel')
       .select('id')
-      .or(`email.eq.${email},name.eq.${name}`)
+      .or(`email.eq.${email},name.eq.${username}`)
 
     if (checkError) {
       console.error('Error checking existing user:', checkError)
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     if (existingUser && existingUser.length > 0) {
       return NextResponse.json(
-        { error: 'Email-ul sau numele există deja' },
+        { error: 'Email-ul sau username-ul există deja' },
         { status: 409 }
       )
     }
@@ -55,9 +55,9 @@ export async function POST(request: NextRequest) {
       .insert([
         {
           email,
-          name,
+          name: username, // Store username as name in database
           password_hash: passwordHash,
-          has_access: false, // Set default access to false
+          has_access: true, // Set default access to true for testing
           created_at: now,
           updated_at: now,
         }
@@ -74,11 +74,11 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({
-      message: 'Cont creat cu succes! Contul va fi activat de administrator.',
+      message: 'Cont creat cu succes! Te poți conecta acum.',
       user: {
         id: newUser.id,
         email: newUser.email,
-        name: newUser.name,
+        username: newUser.name,
         has_access: newUser.has_access,
       }
     }, { status: 201 })

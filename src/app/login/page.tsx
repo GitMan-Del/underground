@@ -42,7 +42,7 @@ function LoginForm() {
         // Check if user is authenticated
         const session = await getSession();
         if (session) {
-          router.push("/my-pc");
+          router.push("/"); 
         }
       }
     } catch {
