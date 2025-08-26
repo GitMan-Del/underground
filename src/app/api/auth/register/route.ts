@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
           email,
           name: username, // Store username as name in database
           password_hash: passwordHash,
-          has_access: true, // Set default access to true for testing
+          has_access: false, // Set default access to true for testing
           created_at: now,
           updated_at: now,
         }

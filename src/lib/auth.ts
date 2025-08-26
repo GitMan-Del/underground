@@ -68,7 +68,7 @@ const authConfig = {
             return null
           }
 
-          // Cast user to the correct type to fix TypeScript issues
+      
           const typedUser = user as {
             id: string;
             email: string;
@@ -77,10 +77,10 @@ const authConfig = {
             image?: string;
             created_at: string;
             updated_at: string;
-            has_access: boolean; // Added has_access to the type
+            has_access: boolean; 
           };
 
-          // Ensure user has the required fields
+        
           if (!typedUser.password_hash) {
             console.log('User has no password hash')
             return null
@@ -97,7 +97,6 @@ const authConfig = {
             return null
           }
           
-          // Now TypeScript knows the exact types - use explicit type assertion
           const passwordHash = typedUser.password_hash as string;
           const isPasswordValid = await bcrypt.compare(credentials.password as string, passwordHash)
 

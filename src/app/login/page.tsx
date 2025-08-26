@@ -13,6 +13,7 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessVideo, setShowSuccessVideo] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -42,7 +43,8 @@ function LoginForm() {
         // Check if user is authenticated
         const session = await getSession();
         if (session) {
-          router.push("/"); 
+          // Show success video first
+          setShowSuccessVideo(true);
         }
       }
     } catch {
@@ -51,6 +53,42 @@ function LoginForm() {
       setIsLoading(false);
     }
   };
+
+  const handleVideoEnded = () => {
+    // Redirect to home page after video ends
+    router.push("/");
+  };
+
+  // Show success video overlay
+  if (showSuccessVideo) {
+    return (
+      <div className="w-full h-screen relative overflow-hidden">
+        {/* Background video continues playing */}
+        <video
+          className="w-full h-screen object-cover pointer-events-none absolute inset-0"
+          autoPlay
+          muted
+          loop
+        >
+          <source src="/Loop_LoginLoop.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        
+        {/* Success video overlay */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
+          <video
+            className="w-full h-full object-cover"
+            autoPlay
+            muted
+            onEnded={handleVideoEnded}
+          >
+            <source src="/Action_LoginToLanding.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-screen relative overflow-hidden flex items-center justify-center">

@@ -20,7 +20,7 @@ export function useAuth() {
   }
 
   const redirectToHome = () => {
-    router.push("/") // Changed from /my-pc to /
+    router.push("/") 
   }
 
   return {
@@ -31,6 +31,6 @@ export function useAuth() {
     user: session?.user,
     logout,
     redirectToLogin,
-    redirectToHome, // Updated function name
+    redirectToHome,
   }
 }
