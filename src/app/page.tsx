@@ -1,15 +1,27 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect , useRef  } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 export default function Home() {
+
+  const videoRef = useRef(null);
+  useEffect(() => {
+    const shouldPlay = sessionStorage.getItem('playVideo') === 'true';
+
+    if (shouldPlay && videoRef.current) {
+      (videoRef.current as HTMLVideoElement).play();
+      sessionStorage.removeItem('playVideo'); // prevenim redarea multiplă
+    }
+  }, []);
+
+
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  const button = "/button.svg";
+  const button = "icons/button.svg";
   const [showOverlayVideo, setShowOverlayVideo] = React.useState(false);
   const [isButtonVisible, setIsButtonVisible] = React.useState(true);
   const [isPinging, setIsPinging] = React.useState(false);
@@ -66,7 +78,7 @@ export default function Home() {
         muted
         loop
       >
-        <source src="/Loop_LandingLoop.mp4" type="video/mp4" />
+        <source src="videos/Loop_LandingLoop.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       {isButtonVisible && (
@@ -94,14 +106,28 @@ export default function Home() {
             ref={overlayVideoRef}
             className="w-full h-full object-cover"
             autoPlay
-            muted
+            muted 
             onEnded={handleOverlayVideoEnded}
           >
-            <source src="/Succesfull_LandingToPC.mp4" type="video/mp4" />
+            <source src="videos/Succesfull_LandingToPC.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
       )}
+
+      <div>
+      <video
+        ref={videoRef}
+        className="w-full h-full object-cover z-50"
+        autoPlay
+        muted 
+      >
+        <source src="/videos/Action_PcToLanding.mp4" type="video/mp4" />
+        Browserul tău nu suportă video HTML5.
+      </video>
     </div>
+
+    </div>
+
   );
 }

@@ -99,7 +99,7 @@ function LoginForm() {
         muted
         loop
       >
-        <source src="/Loop_LoginLoop.mp4" type="video/mp4" />
+        <source src="videos/Loop_LoginLoop.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
@@ -175,7 +175,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full rounded-md py-1.5 text-base font-semibold shadow-md transition hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded-md py-1.5 text-base font-semibold shadow-md transition hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed hover:cursor-pointer"
             style={{
               fontFamily: "inherit",
               background: "radial-gradient(circle at 50% 50%, #151515 100%, #313131 100%)",
@@ -184,24 +184,14 @@ function LoginForm() {
           >
             {isLoading ? "SE CONECTEAZĂ..." : "SIGN IN"}
           </button>
-
-          {/* Register link */}
-          <div className="text-center mt-2">
-            <span className="text-xs text-white">Nu ai cont? </span>
-            <Link
-              href="/register"
-              className="text-xs text-[#2ec4ff] font-semibold hover:underline"
-            >
-              Înregistrează-te
-            </Link>
-          </div>
         </form>
 
         {/* Require Access Button at the bottom of the screen */}
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex justify-center z-50">
+        <Link href="/register">
           <button
             type="button"
-            className="w-fit max-w-md px-5 rounded-md py-1.5 text-base font-semibold shadow-md transition hover:brightness-110"
+            className="w-fit max-w-md px-5 rounded-md py-1.5 text-base font-semibold shadow-md transition hover:brightness-110 hover:cursor-pointer"
             style={{
               fontFamily: "inherit",
               background: "radial-gradient(circle at 50% 50%, #151515 100%, #313131 100%)",
@@ -209,7 +199,8 @@ function LoginForm() {
             }}
           >
             REQUIRE ACCESS
-          </button>
+            </button>
+            </Link>
         </div>
       </div>
     </div>
