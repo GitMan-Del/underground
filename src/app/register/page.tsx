@@ -66,8 +66,15 @@ export default function RegisterPage() {
         return;
       }
 
-      // Registration successful, redirect to login
-      router.push("/login");
+      // Store registration data in sessionStorage for quiz
+      sessionStorage.setItem('tempRegistrationData', JSON.stringify({
+        email: formData.email,
+        username: formData.username,
+        password: formData.password,
+      }));
+
+      // Registration data saved, redirect to quiz
+      router.push("/quiz");
     } catch {
       setErrors(["A apărut o eroare. Încearcă din nou."]);
     } finally {
@@ -175,19 +182,19 @@ export default function RegisterPage() {
             <label className="flex items-center gap-2 text-xs text-[#bdbdbd]">
               <input type="checkbox" required className="accent-[#2ec4ff] w-4 h-4 hover:cursor-pointer" />
               <span>
-                Sunt de acord cu <a href="#" className="text-[#2ec4ff] underline hover:text-[#00bfff]">Termenii și Condițiile EULA</a> (End-User License Agreement)
+                Sunt de acord cu <Link href="/termeni-si-conditii" className="text-[#2ec4ff] underline hover:text-[#00bfff]">Termenii și Condițiile EULA</Link> (End-User License Agreement)
               </span>
             </label>
             <label className="flex items-center gap-2 text-xs text-[#bdbdbd]">
               <input type="checkbox" required className="accent-[#2ec4ff] w-4 h-4 hover:cursor-pointer" />
               <span>
-                Sunt de acord cu <a href="#" className="text-[#2ec4ff] underline hover:text-[#00bfff]">Politica de Confidențialitate</a> GDPR
+                Sunt de acord cu <Link href="/politica-confidentialitate" className="text-[#2ec4ff] underline hover:text-[#00bfff]">Politica de Confidențialitate</Link> GDPR
               </span>
             </label>
             <label className="flex items-center gap-2 text-xs text-[#bdbdbd]">
               <input type="checkbox" required className="accent-[#2ec4ff] w-4 h-4 hover:cursor-pointer" />
               <span>
-                Sunt de acord cu <a href="#" className="text-[#2ec4ff] underline hover:text-[#00bfff]">Cookies & Tracking Policy</a>
+                Sunt de acord cu <Link href="/cookies-tracking" className="text-[#2ec4ff] underline hover:text-[#00bfff]">Cookies & Tracking Policy</Link>
               </span>
             </label>
           </div>

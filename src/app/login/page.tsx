@@ -31,6 +31,34 @@ function LoginForm() {
     setIsLoading(true);
 
     try {
+      // First, check if user exists and has access
+      const accessResponse = await fetch('/api/auth/check-access', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const accessData = await accessResponse.json();
+      
+      if (!accessResponse.ok) {
+        if (accessData.error === 'NO_ACCESS') {
+          setError("Nu ai acces încă. Contul se află sub review.");
+          setIsLoading(false);
+          return;
+        } else if (accessData.error === 'USER_NOT_FOUND') {
+          setError("Email sau parolă incorectă");
+          setIsLoading(false);
+          return;
+        } else {
+          setError("A apărut o eroare. Încearcă din nou.");
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // If user has access, proceed with authentication
       const result = await signIn("credentials", {
         email,
         password,
@@ -43,7 +71,7 @@ function LoginForm() {
         // Check if user is authenticated
         const session = await getSession();
         if (session) {
-          // Show success video first
+          // Show success video
           setShowSuccessVideo(true);
         }
       }

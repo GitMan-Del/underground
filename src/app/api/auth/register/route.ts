@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import bcrypt from 'bcrypt'
-import { supabase } from '../../../../lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,67 +19,25 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if user already exists
-    const { data: existingUser, error: checkError } = await supabase
-      .from('users_tabel')
-      .select('id')
-      .or(`email.eq.${email},name.eq.${username}`)
-
-    if (checkError) {
-      console.error('Error checking existing user:', checkError)
-      return NextResponse.json(
-        { error: 'Eroare la verificarea utilizatorului' },
-        { status: 500 }
-      )
+    // Store temporary registration data in session/cookie
+    // This will be used later when creating the actual account after quiz completion
+    const tempRegistrationData = {
+      email,
+      username,
+      password,
+      timestamp: new Date().toISOString()
     }
 
-    if (existingUser && existingUser.length > 0) {
-      return NextResponse.json(
-        { error: 'Email-ul sau username-ul există deja' },
-        { status: 409 }
-      )
-    }
-
-    // Hash password
-    const saltRounds = 12
-    const passwordHash = await bcrypt.hash(password, saltRounds)
-
-    // Get current timestamp
-    const now = new Date().toISOString()
-
-    // Create user in Supabase
-    const { data: newUser, error: createError } = await supabase
-      .from('users_tabel')
-      .insert([
-        {
-          email,
-          name: username, // Store username as name in database
-          password_hash: passwordHash,
-          has_access: false, // Set default access to true for testing
-          created_at: now,
-          updated_at: now,
-        }
-      ])
-      .select('id, email, name, has_access, created_at')
-      .single()
-
-    if (createError) {
-      console.error('Error creating user:', createError)
-      return NextResponse.json(
-        { error: 'Eroare la crearea utilizatorului' },
-        { status: 500 }
-      )
-    }
-
+    // For now, we'll just return success and redirect to quiz
+    // The actual account creation will happen in the quiz completion endpoint
     return NextResponse.json({
-      message: 'Cont creat cu succes! Te poți conecta acum.',
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        username: newUser.name,
-        has_access: newUser.has_access,
+      message: 'Datele au fost salvate temporar. Completează quiz-ul pentru a-ți crea contul.',
+      tempData: {
+        email,
+        username,
+        hasAccess: false
       }
-    }, { status: 201 })
+    }, { status: 200 })
 
   } catch (error) {
     console.error('Registration error:', error)
