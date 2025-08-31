@@ -6,16 +6,8 @@ import Link from "next/link";
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function Mypc() {
-    
-    // video de logout
-    const router = useRouter();
-  
-    const handleLogOut = () => {
-        router.push('/')
-    };
-  
-    const { isAuthenticated, isLoading, user, logout, redirectToLogin } = useAuth();
+export default function Mypc() {  
+    const { isAuthenticated, isLoading, user, logout, redirectToLogin , redirectToHome } = useAuth();
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {
@@ -77,7 +69,7 @@ export default function Mypc() {
              {/* Need changes */}
             <div className="w-[70%] h-fit bg-[#1C1C1C] flex flex-col rounded-xl absolute top-1/2 right-1/2 translate-x-1/2  -translate-y-1/2 justify-start">
                 <button
-                onClick={handleLogOut}
+                onClick={redirectToHome}
                 className= "hover:cursor-pointer w-5 h-5 bg-red-600 p-1 hover:bg-red-400 transition absolute tpo-0 right-0"
                 >
                 X

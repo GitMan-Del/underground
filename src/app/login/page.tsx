@@ -82,7 +82,7 @@ function LoginForm() {
             muted
             onEnded={handleVideoEnded}
           >
-            <source src="/Action_LoginToLanding.mp4" type="video/mp4" />
+            <source src="videos/Action_LoginToLanding.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
